@@ -14,7 +14,23 @@ interface HomeProps {
   
 }
 
+export const getServerSideProps = async () => {
 
+  const [poolCountResponse, guessCountResponse, usersCountResponse] = await Promise.all([
+    api.get('pools/count'),
+    api.get('guesses/count'),
+    api.get('users/count')
+  ])
+
+  return {
+    props: {
+      poolCount: poolCountResponse.data.count,
+      guessCount: guessCountResponse.data.count,
+      usersCount: usersCountResponse.data.count,
+    }
+  }
+
+}
 
 export default function Home(props: HomeProps) {
 
@@ -81,24 +97,4 @@ export default function Home(props: HomeProps) {
       <Image src={appPreviewImg} alt="Dois celulares exibindo uma prévia da aplicação móvel do NLW Copa" quality={100}/>
     </div>
   )
-}
-
-
-
-export const getServerSideProps = async () => {
-
-  const [poolCountResponse, guessCountResponse, usersCountResponse] = await Promise.all([
-    api.get('pools/count'),
-    api.get('guesses/count'),
-    api.get('users/count')
-  ])
-
-  return {
-    props: {
-      poolCount: poolCountResponse.data.count,
-      guessCount: guessCountResponse.data.count,
-      usersCount: usersCountResponse.data.count,
-    }
-  }
-
 }
